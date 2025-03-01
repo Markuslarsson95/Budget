@@ -1,0 +1,60 @@
+﻿@page "/"
+
+<PageTitle>Main</PageTitle>
+
+<h1>Main</h1>
+
+@if (_expenses == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Utgift</th>
+            <th>Kategori</th>
+            <th>Kostnad</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var expense in _expenses)
+        {
+            <tr>
+                <td>@expense.Id</td>
+                <td>@expense.Name</td>
+                <td>@expense.Category</td>
+                <td>@expense.Amount</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Expense[]? _expenses;
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _expenses = Enumerable.Range(1, 5).Select(index => new Expense
+        {
+            Id = index,
+            Name = $"Utgift {index}",
+            Category = $"Kategori {index}",
+            Amount = Random.Shared.Next(150, 2000)
+        }).ToArray();
+    }
+
+    private class Expense
+    {
+        public int Id { get; init; }
+        public required string Name { get; init; }
+        public required string Category { get; init; }
+        public int Amount { get; init; }
+    }
+}
