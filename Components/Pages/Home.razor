@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Budget.Models
+@using Microsoft.EntityFrameworkCore
 
 <PageTitle>Main</PageTitle>
 
@@ -19,6 +21,7 @@ else
             <th>Utgift</th>
             <th>Kategori</th>
             <th>Kostnad</th>
+            <th>Datum</th>
         </tr>
         </thead>
         <tbody>
@@ -26,9 +29,10 @@ else
         {
             <tr>
                 <td>@expense.Id</td>
-                <td>@expense.Name</td>
-                <td>@expense.Category</td>
+                <td>@expense.Title</td>
+                <td>@expense.Category.Name</td>
                 <td>@expense.Amount</td>
+                <td>@expense.Date</td>
             </tr>
         }
         </tbody>
@@ -36,25 +40,16 @@ else
 }
 
 @code {
-    private Expense[]? _expenses;
+    private List<Expense>? _expenses;
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        _expenses = Enumerable.Range(1, 5).Select(index => new Expense
-        {
-            Id = index,
-            Name = $"Utgift {index}",
-            Category = $"Kategori {index}",
-            Amount = Random.Shared.Next(150, 2000)
-        }).ToArray();
+        //_expenses = await GetExpenses();
     }
-
-    private class Expense
+/*
+    private static async Task<List<Expense>?> GetExpenses()
     {
-        public int Id { get; init; }
-        public required string Name { get; init; }
-        public required string Category { get; init; }
-        public int Amount { get; init; }
-    }
+        await using var db = new Data.BudgetContext();
+        return await db.Expenses.Include(e => e.Category).ToListAsync();
+    }*/
 }
