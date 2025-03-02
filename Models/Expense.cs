@@ -1,12 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Budget.Models;
 
 public class Expense
 {
-    public int Id { get; set; }
-    public required string Title { get; set; }
-    public decimal Amount { get; set; }
-    public DateTime Date { get; set; }
+    public int Id { get; init; }
+    [MaxLength(250)]
+    public required string Title { get; init; }
+    public decimal Amount { get; init; }
+    public DateOnly Date { get; init; }
     
-    public int CategoryId { get; set; }
-    public required Category Category { get; set; }
+    public int CategoryId { get; init; }
+    public required Category Category { get; init; }
 }
