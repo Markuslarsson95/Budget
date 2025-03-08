@@ -1,31 +1,28 @@
 ﻿@page "/"
 @using Budget.Models
-@using Microsoft.EntityFrameworkCore
+@using Budget.Services
+@rendermode InteractiveServer
+@inject IExpenseService ExpenseService
 
 <PageTitle>Main</PageTitle>
 
 <h1>Main</h1>
 
-@if (_expenses == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Utgift</th>
-            <th>Kategori</th>
-            <th>Kostnad</th>
-            <th>Datum</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var expense in _expenses)
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Utgift</th>
+        <th>Kategori</th>
+        <th>Kostnad</th>
+        <th>Datum</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_expenses is not null)
+    {
+        foreach (var expense in _expenses)
         {
             <tr>
                 <td>@expense.Id</td>
@@ -35,21 +32,16 @@ else
                 <td>@expense.Date</td>
             </tr>
         }
-        </tbody>
-    </table>
-}
+    }
+    </tbody>
+</table>
+
 
 @code {
     private List<Expense>? _expenses;
-    
+
     protected override async Task OnInitializedAsync()
     {
-        //_expenses = await GetExpenses();
+        _expenses = await ExpenseService.GetExpensesAsync();
     }
-/*
-    private static async Task<List<Expense>?> GetExpenses()
-    {
-        await using var db = new Data.BudgetContext();
-        return await db.Expenses.Include(e => e.Category).ToListAsync();
-    }*/
 }
